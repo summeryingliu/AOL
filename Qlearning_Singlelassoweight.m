@@ -1,0 +1,10 @@
+function CVSingle=Qlearning_Singlelassoweight(H,A,R,W)
+n=size(A,1);
+X=[H A diag(A)*H];
+[fit,fi]=lasso(X,R,'NumLambda',10,'CV',4,'Weights',W);
+CVSingle.co=[fi.Intercept(fi.Index1SE);fit(:,fi.Index1SE)];
+XX1=[ones(n,1) H ones(n,1) eye(n)*H];
+XX2=[ones(n,1) H -ones(n,1) -eye(n)*H];
+Q1=XX1*CVSingle.co;
+Q2=XX2*CVSingle.co;
+CVSingle.Q=max(Q1,Q2);
